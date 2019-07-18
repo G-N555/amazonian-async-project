@@ -27,12 +27,6 @@ class ReviewBuilder {
     });
   }
 
-  // getData() {
-  //   const result = {};
-
-  //   return result;
-  // }
-
   buildReviewsPromises() {
     return new Promise((resolve, reject) => {
       const data = {};
@@ -54,7 +48,11 @@ class ReviewBuilder {
   }
 
   async buildReviewsAsyncAwait() {
-    // FIXME
+    try {
+      return await this.buildReviewsPromises();
+    } catch (err) {
+      throw new Error(err.message);
+    }
   }
 }
 
