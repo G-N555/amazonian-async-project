@@ -27,8 +27,30 @@ class ReviewBuilder {
     });
   }
 
+  // getData() {
+  //   const result = {};
+
+  //   return result;
+  // }
+
   buildReviewsPromises() {
-    // FIXME
+    return new Promise((resolve, reject) => {
+      const data = {};
+      fs.readFile("./data/products.json", "utf8", (err, products) => {
+        if (err) throw err;
+        fs.readFile("./data/reviews.json", "utf8", (err, reviews) => {
+          if (err) throw err;
+          fs.readFile("./data/users.json", "utf8", (err, users) => {
+            if (err) throw err;
+            data.products = JSON.parse(products);
+            data.reviews = JSON.parse(reviews);
+            data.users = JSON.parse(users);
+            resolve(produceResult(data));
+            reject((error) => error);
+          });
+        });
+      });
+    });
   }
 
   async buildReviewsAsyncAwait() {
