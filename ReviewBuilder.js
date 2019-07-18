@@ -28,31 +28,25 @@ class ReviewBuilder {
   }
 
   buildReviewsPromises() {
-    return new Promise((resolve, reject) => {
-      const data = {};
-      fs.readFile("./data/products.json", "utf8", (err, products) => {
-        if (err) throw err;
-        fs.readFile("./data/reviews.json", "utf8", (err, reviews) => {
-          if (err) throw err;
-          fs.readFile("./data/users.json", "utf8", (err, users) => {
-            if (err) throw err;
-            data.products = JSON.parse(products);
-            data.reviews = JSON.parse(reviews);
-            data.users = JSON.parse(users);
-            resolve(produceResult(data));
-            reject((error) => error);
-          });
-        });
+    return Promise.all([
+      readFile("./data/products.json"),
+      readFile("./data/reviews.json"),
+      readFile("./data/users.json"),
+    ]).then((responses) => {
+      return produceResult({
+        products: JSON.parse(responses[0]),
+        reviews: JSON.parse(responses[1]),
+        users: JSON.parse(responses[2]),
       });
     });
   }
 
   async buildReviewsAsyncAwait() {
-    try {
-      return await this.buildReviewsPromises();
-    } catch (err) {
-      throw new Error(err.message);
-    }
+    const obj = {};
+    obj.products = await JSON.parse(fs.readFileSync("./data/products.json"));
+    obj.reviews = await JSON.parse(fs.readFileSync("./data/reviews.json"));
+    obj.users = await JSON.parse(fs.readFileSync("./data/users.json"));
+    return produceResult(obj);
   }
 }
 
